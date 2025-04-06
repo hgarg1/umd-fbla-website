@@ -12,7 +12,8 @@ import {
   particleEffect,
   parallaxScroll,
   shimmerEffect,
-  gradientFlow
+  gradientFlow,
+  slideIn
 } from '@/utils/animations'
 
 const features = [
@@ -47,7 +48,10 @@ export default function Home() {
       exit="exit"
     >
       {/* Hero section with particle effects */}
-      <div className="relative isolate overflow-hidden min-h-screen">
+      <motion.div 
+        className="relative isolate overflow-hidden bg-gradient-to-b from-fbla-blue/20"
+        variants={staggerChildren}
+      >
         {/* Animated background particles */}
         <motion.div 
           className="absolute inset-0 -z-10"
@@ -122,11 +126,11 @@ export default function Home() {
             </motion.div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Feature section with 3D cards */}
       <motion.div 
-        className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8"
+        className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32"
         variants={staggerChildren}
       >
         <motion.div 
@@ -134,8 +138,8 @@ export default function Home() {
           variants={fadeIn}
         >
           <motion.h2 
-            className="text-base font-semibold leading-7 text-fbla-gold"
-            variants={floatAnimation}
+            className="text-base font-semibold leading-7 text-fbla-blue"
+            variants={heroTextReveal}
           >
             Why Join FBLA?
           </motion.h2>
@@ -143,24 +147,32 @@ export default function Home() {
             className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
             variants={heroTextReveal}
           >
-            Everything you need to succeed in business
+            Everything you need to succeed
           </motion.p>
           <motion.p 
             className="mt-6 text-lg leading-8 text-gray-600"
             variants={fadeIn}
           >
-            FBLA is a premier student business organization helping students prepare for careers in business.
+            Join the University of Maryland FBLA chapter to develop your leadership skills,
+            network with professionals, and prepare for your future career.
           </motion.p>
         </motion.div>
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
+
+        <motion.div 
+          className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none"
+          variants={staggerChildren}
+        >
+          <motion.dl 
+            className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3"
+            variants={staggerChildren}
+          >
             {features.map((feature) => (
-              <motion.div
+              <motion.div 
                 key={feature.name}
-                className="flex flex-col backdrop-blur-lg bg-white/50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden"
-                variants={fadeIn}
-                whileHover={card3DHover.hover}
-                initial={card3DHover.initial}
+                className="flex flex-col p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+                variants={slideIn}
+                whileHover="hover"
+                initial="initial"
               >
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-br from-fbla-blue/5 to-fbla-gold/5"
@@ -191,14 +203,14 @@ export default function Home() {
                 </motion.div>
               </motion.div>
             ))}
-          </dl>
-        </div>
+          </motion.dl>
+        </motion.div>
       </motion.div>
 
       {/* CTA section with parallax effect */}
       <motion.div 
         className="relative isolate mt-32 px-6 py-32 sm:mt-56 sm:py-40 lg:px-8"
-        variants={parallaxScroll}
+        variants={staggerChildren}
       >
         <motion.div 
           className="absolute inset-0 bg-gradient-to-br from-fbla-blue/10 to-fbla-gold/10"
