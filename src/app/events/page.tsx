@@ -68,8 +68,8 @@ export default function Events() {
               key={event.name}
               className="flex flex-col items-start p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden"
               variants={slideIn}
-              whileHover={cardHover.hover}
-              initial={cardHover.initial}
+              whileHover="hover"
+              initial="initial"
             >
               {/* Animated background gradient */}
               <motion.div 
