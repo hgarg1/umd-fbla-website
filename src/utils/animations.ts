@@ -1,32 +1,32 @@
 import { Variants } from 'framer-motion'
 
-export const fadeIn: Variants = {
+export const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 }
-}
+} as const
 
-export const staggerChildren: Variants = {
+export const staggerChildren = {
   animate: {
     transition: {
       staggerChildren: 0.1
     }
   }
-}
+} as const
 
-export const slideIn: Variants = {
+export const slideIn = {
   initial: { x: -100, opacity: 0 },
   animate: { x: 0, opacity: 1 },
   exit: { x: 100, opacity: 0 }
-}
+} as const
 
-export const scaleIn: Variants = {
+export const scaleIn = {
   initial: { scale: 0.8, opacity: 0 },
   animate: { scale: 1, opacity: 1 },
   exit: { scale: 0.8, opacity: 0 }
-}
+} as const
 
-export const pageTransition: Variants = {
+export const pageTransition = {
   initial: { opacity: 0, y: 20 },
   animate: { 
     opacity: 1, 
@@ -34,27 +34,27 @@ export const pageTransition: Variants = {
     transition: { duration: 0.3 }
   },
   exit: { opacity: 0, y: -20 }
-}
+} as const
 
-export const heroTextReveal: Variants = {
+export const heroTextReveal = {
   initial: { y: 100, opacity: 0 },
   animate: { 
     y: 0, 
     opacity: 1,
     transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] }
   }
-}
+} as const
 
-export const cardHover: Variants = {
+export const cardHover = {
   initial: { scale: 1 },
   hover: { 
     scale: 1.02,
     transition: { duration: 0.2 }
   }
-}
+} as const
 
 // New 3D animations
-export const card3DHover: Variants = {
+export const card3DHover = {
   initial: { scale: 1 },
   hover: {
     scale: 1.05,
@@ -62,9 +62,9 @@ export const card3DHover: Variants = {
       duration: 0.2
     }
   }
-}
+} as const
 
-export const floatAnimation: Variants = {
+export const floatAnimation = {
   initial: { y: 0 },
   animate: {
     y: [-10, 10, -10],
@@ -74,9 +74,9 @@ export const floatAnimation: Variants = {
       ease: "easeInOut"
     }
   }
-}
+} as const
 
-export const particleEffect: Variants = {
+export const particleEffect = {
   initial: { 
     scale: 0,
     opacity: 0
@@ -90,9 +90,9 @@ export const particleEffect: Variants = {
       repeatDelay: 0.5
     }
   }
-}
+} as const
 
-export const parallaxScroll: Variants = {
+export const parallaxScroll = {
   initial: { y: 0 },
   whileInView: { 
     y: -50,
@@ -101,9 +101,9 @@ export const parallaxScroll: Variants = {
       ease: 'easeOut'
     }
   }
-}
+} as const
 
-export const shimmerEffect: Variants = {
+export const shimmerEffect = {
   initial: { opacity: 0.5 },
   animate: {
     opacity: 1,
@@ -113,9 +113,9 @@ export const shimmerEffect: Variants = {
       repeatType: "reverse"
     }
   }
-}
+} as const
 
-export const gradientFlow: Variants = {
+export const gradientFlow = {
   initial: { 
     backgroundPosition: '0% 0%',
     backgroundSize: '200% 200%'
@@ -125,7 +125,7 @@ export const gradientFlow: Variants = {
     transition: {
       duration: 10,
       repeat: Infinity,
-      repeatType: "reverse" as const
+      repeatType: "reverse"
     }
   }
-} 
+} as const 
