@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { fadeIn, staggerChildren, heroTextReveal, cardHover, slideIn } from '@/utils/animations'
+import { fadeIn, staggerChildren, heroTextReveal, cardEnter, slideIn } from '@/utils/animations'
 
 const events = [
   {
@@ -67,9 +67,10 @@ export default function Events() {
             <motion.article
               key={event.name}
               className="flex flex-col items-start p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden"
-              variants={slideIn}
-              whileHover="hover"
+              variants={cardEnter}
               initial="initial"
+              animate="animate"
+              whileHover="hover"
             >
               {/* Animated background gradient */}
               <motion.div 

@@ -6,7 +6,7 @@ import {
   fadeIn, 
   staggerChildren, 
   heroTextReveal, 
-  cardHover, 
+  cardEnter,
   card3DHover,
   floatAnimation,
   particleEffect,
@@ -170,9 +170,10 @@ export default function Home() {
               <motion.div 
                 key={feature.name}
                 className="flex flex-col p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
-                variants={slideIn}
-                whileHover="hover"
+                variants={cardEnter}
                 initial="initial"
+                animate="animate"
+                whileHover="hover"
               >
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-br from-fbla-blue/5 to-fbla-gold/5"

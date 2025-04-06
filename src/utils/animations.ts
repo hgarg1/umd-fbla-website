@@ -20,6 +20,29 @@ export const slideIn: Variants = {
   exit: { x: 100, opacity: 0 }
 }
 
+export const cardEnter: Variants = {
+  initial: { 
+    y: 50,
+    opacity: 0,
+    scale: 0.95
+  },
+  animate: { 
+    y: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  },
+  hover: {
+    scale: 1.02,
+    transition: {
+      duration: 0.2
+    }
+  }
+}
+
 export const scaleIn: Variants = {
   initial: { scale: 0.8, opacity: 0 },
   animate: { scale: 1, opacity: 1 },
@@ -55,9 +78,25 @@ export const cardHover: Variants = {
 
 // New 3D animations
 export const card3DHover: Variants = {
-  initial: { scale: 1 },
+  initial: { 
+    y: 50,
+    opacity: 0,
+    scale: 0.95,
+    rotateX: 10
+  },
+  animate: { 
+    y: 0,
+    opacity: 1,
+    scale: 1,
+    rotateX: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  },
   hover: {
     scale: 1.05,
+    rotateX: -5,
     transition: {
       duration: 0.2
     }
