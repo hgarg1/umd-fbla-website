@@ -7,8 +7,44 @@ import {
   staggerChildren, 
   card3DHover,
   floatAnimation,
-  shimmerEffect
+  shimmerEffect,
+  heroTextReveal,
+  cardEnter
 } from '@/utils/animations'
+import Link from 'next/link'
+import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline'
+
+interface ContactMethod {
+  name: string
+  description: string
+  icon: typeof EnvelopeIcon
+  href: string
+  linkText: string
+}
+
+const contactMethods: ContactMethod[] = [
+  {
+    name: 'Email',
+    description: 'Send us an email and we\'ll get back to you as soon as possible.',
+    icon: EnvelopeIcon,
+    href: 'mailto:contact@umdfbla.org',
+    linkText: 'contact@umdfbla.org'
+  },
+  {
+    name: 'Phone',
+    description: 'Give us a call during our office hours.',
+    icon: PhoneIcon,
+    href: 'tel:+13015551234',
+    linkText: '(301) 555-1234'
+  },
+  {
+    name: 'Location',
+    description: 'Visit us at our office in Van Munching Hall.',
+    icon: MapPinIcon,
+    href: 'https://maps.google.com',
+    linkText: 'View on Map'
+  }
+]
 
 const socialLinks = [
   {
@@ -95,104 +131,90 @@ export default function Contact() {
         </motion.div>
       </div>
 
-      {/* Contact Form Section */}
+      {/* Contact Methods Section */}
       <motion.div 
-        className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8"
+        className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32"
         variants={staggerChildren}
       >
-        <div className="mx-auto max-w-2xl lg:mx-0">
+        <motion.div 
+          className="mx-auto max-w-2xl lg:text-center"
+          variants={fadeIn}
+        >
           <motion.h2 
-            className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
-            variants={fadeIn}
+            className="text-base font-semibold leading-7 text-fbla-blue"
+            variants={heroTextReveal}
           >
             Get in Touch
           </motion.h2>
           <motion.p 
+            className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            variants={heroTextReveal}
+          >
+            Contact Us
+          </motion.p>
+          <motion.p 
             className="mt-6 text-lg leading-8 text-gray-600"
             variants={fadeIn}
           >
-            Fill out the form below and we'll get back to you as soon as possible.
+            Have questions or want to get involved? We'd love to hear from you.
           </motion.p>
-        </div>
+        </motion.div>
 
-        <motion.form 
-          onSubmit={handleSubmit}
-          className="mx-auto mt-16 max-w-xl sm:mt-20"
-          variants={fadeIn}
+        <motion.div 
+          className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none"
+          variants={staggerChildren}
         >
-          <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-            <div>
-              <label htmlFor="name" className="block text-sm font-semibold leading-6 text-gray-900">
-                Name
-              </label>
-              <div className="mt-2.5">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-fbla-blue sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold leading-6 text-gray-900">
-                Email
-              </label>
-              <div className="mt-2.5">
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-fbla-blue sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div className="sm:col-span-2">
-              <label htmlFor="subject" className="block text-sm font-semibold leading-6 text-gray-900">
-                Subject
-              </label>
-              <div className="mt-2.5">
-                <input
-                  type="text"
-                  name="subject"
-                  id="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-fbla-blue sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div className="sm:col-span-2">
-              <label htmlFor="message" className="block text-sm font-semibold leading-6 text-gray-900">
-                Message
-              </label>
-              <div className="mt-2.5">
-                <textarea
-                  name="message"
-                  id="message"
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-fbla-blue sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="mt-10">
-            <motion.button
-              type="submit"
-              className="block w-full rounded-md bg-fbla-blue px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Send Message
-            </motion.button>
-          </div>
-        </motion.form>
+          <motion.dl 
+            className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3"
+            variants={staggerChildren}
+          >
+            {contactMethods.map((method) => (
+              <motion.div 
+                key={method.name}
+                className="flex flex-col p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+                variants={cardEnter}
+                initial="initial"
+                animate="animate"
+                whileHover="hover"
+              >
+                <motion.div 
+                  className="relative h-12 w-12 mx-auto mb-6"
+                  variants={fadeIn}
+                >
+                  <method.icon className="h-12 w-12 text-fbla-blue" />
+                </motion.div>
+                <motion.div 
+                  className="text-center"
+                  variants={fadeIn}
+                >
+                  <motion.h3 
+                    className="text-lg font-semibold leading-7 text-gray-900"
+                    variants={heroTextReveal}
+                  >
+                    {method.name}
+                  </motion.h3>
+                  <motion.p 
+                    className="mt-4 text-sm leading-6 text-gray-600"
+                    variants={fadeIn}
+                  >
+                    {method.description}
+                  </motion.p>
+                  <motion.div 
+                    className="mt-6"
+                    variants={fadeIn}
+                  >
+                    <Link
+                      href={method.href}
+                      className="text-sm font-semibold leading-6 text-fbla-blue hover:text-fbla-gold"
+                    >
+                      {method.linkText} <span aria-hidden="true">→</span>
+                    </Link>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            ))}
+          </motion.dl>
+        </motion.div>
       </motion.div>
 
       {/* Contact Information Section */}
