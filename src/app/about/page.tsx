@@ -10,7 +10,9 @@ import {
   staggerChildren, 
   card3DHover,
   floatAnimation,
-  shimmerEffect
+  shimmerEffect,
+  heroTextReveal,
+  cardEnter
 } from '@/utils/animations'
 
 const leadership = [
@@ -199,54 +201,89 @@ export default function About() {
 
       {/* Leadership Section */}
       <motion.div 
-        className="bg-gray-50 py-24 sm:py-32"
+        className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32"
         variants={staggerChildren}
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <motion.div 
-            className="mx-auto max-w-2xl lg:text-center"
+        <motion.div 
+          className="mx-auto max-w-2xl lg:text-center"
+          variants={fadeIn}
+        >
+          <motion.h2 
+            className="text-base font-semibold leading-7 text-fbla-blue"
+            variants={heroTextReveal}
+          >
+            Our Leadership Team
+          </motion.h2>
+          <motion.p 
+            className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+            variants={heroTextReveal}
+          >
+            Meet the Team
+          </motion.p>
+          <motion.p 
+            className="mt-6 text-lg leading-8 text-gray-600"
             variants={fadeIn}
           >
-            <h2 className="text-base font-semibold leading-7 text-fbla-gold">Our Team</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Meet Our Leadership
-            </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Our dedicated team of student leaders works tirelessly to create opportunities and foster growth within our chapter.
-            </p>
-          </motion.div>
+            Our dedicated team of officers works tirelessly to provide the best experience for our members.
+          </motion.p>
+        </motion.div>
 
-          <motion.div 
-            className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 lg:mx-0 lg:max-w-none"
+        <motion.div 
+          className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none"
+          variants={staggerChildren}
+        >
+          <motion.dl 
+            className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3"
             variants={staggerChildren}
           >
-            {leadership.map((member) => (
-              <motion.div
-                key={member.name}
-                className="flex flex-col items-center cursor-pointer"
-                variants={fadeIn}
-                whileHover="hover"
+            {leadership.map((person) => (
+              <motion.div 
+                key={person.name}
+                className="flex flex-col p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+                variants={cardEnter}
                 initial="initial"
-                onClick={() => setSelectedMember(member)}
+                animate="animate"
+                whileHover="hover"
               >
                 <motion.div 
-                  className="relative w-48 h-48 mb-6 rounded-full overflow-hidden"
-                  variants={card3DHover}
+                  className="relative h-48 w-48 mx-auto mb-6 overflow-hidden rounded-full"
+                  variants={fadeIn}
                 >
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover"
+                  <motion.img
+                    src={person.image}
+                    alt={person.name}
+                    className="h-full w-full object-cover"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.2 }}
                   />
                 </motion.div>
-                <h3 className="text-lg font-semibold text-gray-900">{member.name}</h3>
-                <p className="text-base font-medium text-fbla-blue">{member.role}</p>
-                <p className="mt-2 text-sm text-gray-600 text-center">{member.description}</p>
+                <motion.div 
+                  className="text-center"
+                  variants={fadeIn}
+                >
+                  <motion.h3 
+                    className="text-lg font-semibold leading-7 text-gray-900"
+                    variants={heroTextReveal}
+                  >
+                    {person.name}
+                  </motion.h3>
+                  <motion.p 
+                    className="text-sm leading-6 text-fbla-blue"
+                    variants={fadeIn}
+                  >
+                    {person.role}
+                  </motion.p>
+                  <motion.p 
+                    className="mt-4 text-sm leading-6 text-gray-600"
+                    variants={fadeIn}
+                  >
+                    {person.description}
+                  </motion.p>
+                </motion.div>
               </motion.div>
             ))}
-          </motion.div>
-        </div>
+          </motion.dl>
+        </motion.div>
       </motion.div>
 
       {/* Bio Modal */}
