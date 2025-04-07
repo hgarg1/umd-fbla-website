@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -16,6 +17,7 @@ const navigation = [
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const router = useRouter()
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white shadow-md">
@@ -56,10 +58,10 @@ export default function Navbar() {
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Link
-            href="/contact"
-            className="rounded-md bg-fbla-blue px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            href="/join"
+            className="rounded-md bg-fbla-blue px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-fbla-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fbla-blue"
           >
-            Join Us
+            Join Now
           </Link>
         </div>
       </nav>
@@ -103,11 +105,11 @@ export default function Navbar() {
               </div>
               <div className="py-6">
                 <Link
-                  href="/contact"
+                  href="/join"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Join Us
+                  Join Now
                 </Link>
               </div>
             </div>

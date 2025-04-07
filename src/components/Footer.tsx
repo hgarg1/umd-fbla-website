@@ -1,4 +1,9 @@
+'use client'
+
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
 
 const navigation = {
   main: [
@@ -48,6 +53,27 @@ const navigation = {
 }
 
 export default function Footer() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [userRole, setUserRole] = useState<string | null>(null)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    // Check authentication status
+    const authStatus = localStorage.getItem('isAuthenticated')
+    const role = localStorage.getItem('userRole')
+    setIsAuthenticated(authStatus === 'true')
+    setUserRole(role)
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated')
+    localStorage.removeItem('userRole')
+    setIsAuthenticated(false)
+    setUserRole(null)
+    router.push('/')
+  }
+
   return (
     <footer className="bg-fbla-blue" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
@@ -101,7 +127,56 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
-          <p className="text-xs leading-5 text-gray-400">&copy; {new Date().getFullYear()} University of Maryland FBLA. All rights reserved.</p>
+          <div className="flex justify-between items-center">
+            <p className="text-xs leading-5 text-gray-400">&copy; {new Date().getFullYear()} University of Maryland FBLA. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              {isAuthenticated ? (
+                <div className="relative">
+                  <button
+                    type="button"
+                    className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-300 hover:text-fbla-gold"
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  >
+                    <UserCircleIcon className="h-6 w-6" />
+                    <span>Account</span>
+                  </button>
+                  {userMenuOpen && (
+                    <div className="absolute bottom-full right-0 mb-2 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+                      {userRole === 'admin' && (
+                        <Link
+                          href="/admin/dashboard"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Sign out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="text-sm font-semibold leading-6 text-white hover:text-fbla-gold transition-colors"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/auth/signup"
+                    className="rounded-md bg-fbla-gold px-3.5 py-1.5 text-sm font-semibold text-fbla-blue shadow-sm hover:bg-white transition-colors"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </footer>
