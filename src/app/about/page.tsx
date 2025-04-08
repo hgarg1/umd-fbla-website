@@ -239,11 +239,12 @@ export default function About() {
             {leadership.map((person) => (
               <motion.div 
                 key={person.name}
-                className="flex flex-col p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="flex flex-col p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
                 variants={cardEnter}
                 initial="initial"
                 animate="animate"
                 whileHover="hover"
+                onClick={() => setSelectedMember(person)}
               >
                 <motion.div 
                   className="relative h-48 w-48 mx-auto mb-6 overflow-hidden rounded-full"
