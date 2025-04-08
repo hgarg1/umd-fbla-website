@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { handleGoogleCallback, handleMicrosoftCallback } from '@/services/auth'
 
-export default function AuthCallback() {
+function CallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const code = searchParams.get('code')
@@ -48,5 +48,22 @@ export default function AuthCallback() {
         <p className="mt-2 text-gray-600">Please wait while we complete the authentication process.</p>
       </div>
     </div>
+  )
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold text-gray-900">Loading...</h2>
+            <p className="mt-2 text-gray-600">Please wait...</p>
+          </div>
+        </div>
+      }
+    >
+      <CallbackContent />
+    </Suspense>
   )
 } 
