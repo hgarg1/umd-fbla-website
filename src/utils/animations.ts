@@ -1,44 +1,58 @@
 import { Variants } from 'framer-motion'
 
-export const fadeIn: Variants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 }
-}
-
 export const staggerChildren: Variants = {
+  initial: {
+    opacity: 0
+  },
   animate: {
+    opacity: 1,
     transition: {
       staggerChildren: 0.1
     }
   }
 }
 
-export const slideIn: Variants = {
-  initial: { x: -100, opacity: 0 },
-  animate: { x: 0, opacity: 1 },
-  exit: { x: 100, opacity: 0 }
+export const fadeIn: Variants = {
+  initial: {
+    opacity: 0
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      duration: 0.5
+    }
+  }
 }
 
-export const cardEnter: Variants = {
-  initial: { 
-    y: 50,
+export const slideIn = (direction: 'up' | 'down' | 'left' | 'right'): Variants => ({
+  initial: {
     opacity: 0,
+    y: direction === 'up' ? 20 : direction === 'down' ? -20 : 0,
+    x: direction === 'left' ? 20 : direction === 'right' ? -20 : 0
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    x: 0,
+    transition: {
+      duration: 0.5
+    }
+  }
+})
+
+export const cardEnter: Variants = {
+  initial: {
+    opacity: 0,
+    y: 20,
     scale: 0.95
   },
-  animate: { 
-    y: 0,
+  animate: {
     opacity: 1,
+    y: 0,
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: "easeOut"
-    }
-  },
-  hover: {
-    scale: 1.02,
-    transition: {
-      duration: 0.2
+      ease: 'easeOut'
     }
   }
 }
@@ -60,11 +74,17 @@ export const pageTransition: Variants = {
 }
 
 export const heroTextReveal: Variants = {
-  initial: { y: 100, opacity: 0 },
-  animate: { 
-    y: 0, 
+  initial: {
+    opacity: 0,
+    y: 20
+  },
+  animate: {
     opacity: 1,
-    transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] }
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: 'easeOut'
+    }
   }
 }
 

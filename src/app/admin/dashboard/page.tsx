@@ -1,120 +1,183 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import UserManagement from '@/components/admin/UserManagement'
-import EventManagement from '@/components/admin/EventManagement'
-import ResourceManagement from '@/components/admin/ResourceManagement'
+import { useRouter } from 'next/navigation'
+import { User, Permission } from '@/types/user'
+import { getAdminUser, hasPermission } from '@/services/admin'
+import { isAuthenticated, getCurrentUser, logout } from '@/utils/auth'
+import { staggerChildren, fadeIn, slideIn } from '@/utils/animations'
 
-type TabType = 'events' | 'resources' | 'users'
-
-export default function AdminDashboard() {
+const AdminDashboard = () => {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<TabType>('events')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [admin, setAdmin] = useState<User | null>(null)
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check authentication and admin status
-    const user = JSON.parse(localStorage.getItem('currentUser') || 'null')
-    if (!user) {
-      router.push('/auth/login')
-      return
+    const checkAuth = async () => {
+      if (!isAuthenticated()) {
+        router.push('/auth/login')
+        return
+      }
+
+      const currentUser = getCurrentUser()
+      if (!currentUser || currentUser.role !== 'admin') {
+        router.push('/auth/login')
+        return
+      }
+
+      setCurrentUser(currentUser)
+      setAdmin(getAdminUser())
+      setLoading(false)
     }
 
-    setIsAuthenticated(true)
-    setIsAdmin(user.role === 'administrator')
-
-    if (user.role !== 'administrator') {
-      router.push('/')
-    }
+    checkAuth()
   }, [router])
 
-  if (!isAuthenticated || !isAdmin) {
-    return null
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-fbla-blue"></div>
+      </div>
+    )
   }
 
-  const tabs = [
-    { id: 'events', name: 'Events', count: '3' },
-    { id: 'resources', name: 'Resources', count: '2' },
-    { id: 'users', name: 'Users', count: '5' },
-  ]
-
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="py-10">
-        <header>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">Admin Dashboard</h1>
-          </div>
-        </header>
-        <main>
-          <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            {/* Tabs */}
-            <div className="border-b border-gray-200">
-              <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as TabType)}
-                    className={`
-                      whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium
-                      ${activeTab === tab.id
-                        ? 'border-fbla-blue text-fbla-blue'
-                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                      }
-                    `}
-                  >
-                    {tab.name}
-                    {tab.count ? (
-                      <span
-                        className={`ml-3 rounded-full py-0.5 px-2.5 text-xs font-medium md:inline-block
-                          ${activeTab === tab.id
-                            ? 'bg-fbla-blue/10 text-fbla-blue'
-                            : 'bg-gray-100 text-gray-900'
-                          }
-                        `}
-                      >
-                        {tab.count}
-                      </span>
-                    ) : null}
-                  </button>
-                ))}
-              </nav>
-            </div>
+    <motion.div
+      initial="initial"
+      animate="animate"
+      variants={staggerChildren}
+      className="min-h-screen bg-gray-50 pt-24 px-4 sm:px-6 lg:px-8"
+    >
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
 
-            {/* Content */}
-            <div className="mt-6">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          variants={fadeIn}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {/* Quick Stats */}
+          <motion.div
+            variants={slideIn('up')}
+            className="bg-white rounded-lg shadow-sm p-6"
+          >
+            <h2 className="text-lg font-medium text-gray-900">Quick Stats</h2>
+            <div className="mt-4 grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-500">Total Users</p>
+                <p className="mt-1 text-2xl font-semibold text-gray-900">0</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-500">Active Events</p>
+                <p className="mt-1 text-2xl font-semibold text-gray-900">0</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Recent Activity */}
+          <motion.div
+            variants={slideIn('up')}
+            className="bg-white rounded-lg shadow-sm p-6"
+          >
+            <h2 className="text-lg font-medium text-gray-900">Recent Activity</h2>
+            <div className="mt-4 space-y-4">
+              <p className="text-sm text-gray-500">No recent activity</p>
+            </div>
+          </motion.div>
+
+          {/* System Status */}
+          <motion.div
+            variants={slideIn('up')}
+            className="bg-white rounded-lg shadow-sm p-6"
+          >
+            <h2 className="text-lg font-medium text-gray-900">System Status</h2>
+            <div className="mt-4 space-y-4">
+              <div className="flex items-center">
+                <div className="h-2 w-2 bg-green-500 rounded-full mr-2" />
+                <span className="text-sm text-gray-600">All systems operational</span>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Admin Tools */}
+        <motion.div
+          variants={fadeIn}
+          className="mt-8"
+        >
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Admin Tools</h2>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {hasPermission(currentUser!, Permission.MANAGE_USERS) && (
+              <motion.button
+                variants={slideIn('up')}
+                onClick={() => router.push('/admin/users')}
+                className="bg-white rounded-lg shadow-sm p-6 text-left hover:shadow-md transition-shadow"
               >
-                {activeTab === 'events' && (
-                  <div className="rounded-lg bg-white shadow">
-                    <EventManagement />
-                  </div>
-                )}
+                <h3 className="text-lg font-medium text-gray-900">User Management</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Manage user accounts, roles, and permissions
+                </p>
+              </motion.button>
+            )}
 
-                {activeTab === 'resources' && (
-                  <div className="rounded-lg bg-white shadow">
-                    <ResourceManagement />
-                  </div>
-                )}
+            {hasPermission(currentUser!, Permission.MANAGE_EVENTS) && (
+              <motion.button
+                variants={slideIn('up')}
+                onClick={() => router.push('/admin/events')}
+                className="bg-white rounded-lg shadow-sm p-6 text-left hover:shadow-md transition-shadow"
+              >
+                <h3 className="text-lg font-medium text-gray-900">Event Management</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Create and manage events and competitions
+                </p>
+              </motion.button>
+            )}
 
-                {activeTab === 'users' && (
-                  <div className="rounded-lg bg-white shadow">
-                    <UserManagement />
-                  </div>
-                )}
-              </motion.div>
-            </div>
+            {hasPermission(currentUser!, Permission.MANAGE_RESOURCES) && (
+              <motion.button
+                variants={slideIn('up')}
+                onClick={() => router.push('/admin/resources')}
+                className="bg-white rounded-lg shadow-sm p-6 text-left hover:shadow-md transition-shadow"
+              >
+                <h3 className="text-lg font-medium text-gray-900">Resource Management</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Upload and manage resources and documents
+                </p>
+              </motion.button>
+            )}
+
+            {hasPermission(currentUser!, Permission.VIEW_ANALYTICS) && (
+              <motion.button
+                variants={slideIn('up')}
+                onClick={() => router.push('/admin/analytics')}
+                className="bg-white rounded-lg shadow-sm p-6 text-left hover:shadow-md transition-shadow"
+              >
+                <h3 className="text-lg font-medium text-gray-900">Analytics</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  View system usage and performance metrics
+                </p>
+              </motion.button>
+            )}
+
+            {hasPermission(currentUser!, Permission.MANAGE_SETTINGS) && (
+              <motion.button
+                variants={slideIn('up')}
+                onClick={() => router.push('/admin/settings')}
+                className="bg-white rounded-lg shadow-sm p-6 text-left hover:shadow-md transition-shadow"
+              >
+                <h3 className="text-lg font-medium text-gray-900">Settings</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Configure system settings and preferences
+                </p>
+              </motion.button>
+            )}
           </div>
-        </main>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   )
-} 
+}
+
+export default AdminDashboard 

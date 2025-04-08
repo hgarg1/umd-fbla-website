@@ -205,93 +205,72 @@ export default function UserManagement({ onClose }: UserManagementProps) {
             <form onSubmit={(e) => {
               e.preventDefault()
               handleSaveUser(editForm)
-            }} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={editForm.name || ''}
-                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                />
-              </div>
+            }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={editForm.name || ''}
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={editForm.email || ''}
-                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={editForm.email || ''}
+                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                  Role
-                </label>
-                <select
-                  id="role"
-                  value={editForm.role || ''}
-                  onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                >
-                  {DEFAULT_ROLES.map(role => (
-                    <option key={role.id} value={role.id}>{role.name}</option>
-                  ))}
-                </select>
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Role
+                  </label>
+                  <select
+                    value={editForm.role || ''}
+                    onChange={(e) => setEditForm({ ...editForm, role: e.target.value as 'admin' | 'member' })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
+                  >
+                    {DEFAULT_ROLES.map(role => (
+                      <option key={role.id} value={role.id}>{role.name}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                  Status
-                </label>
-                <select
-                  id="status"
-                  value={editForm.status || 'active'}
-                  onChange={(e) => setEditForm({ ...editForm, status: e.target.value as User['status'] })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="pending">Pending</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Additional Permissions
-                </label>
-                <div className="space-y-2">
-                  {DEFAULT_PERMISSIONS.map(permission => (
-                    <label key={permission.id} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={editForm.permissions?.includes(permission.key)}
-                        onChange={(e) => {
-                          const permissions = editForm.permissions || []
-                          setEditForm({
-                            ...editForm,
-                            permissions: e.target.checked
-                              ? [...permissions, permission.key]
-                              : permissions.filter(p => p !== permission.key)
-                          })
-                        }}
-                        className="h-4 w-4 text-fbla-blue focus:ring-fbla-blue border-gray-300 rounded"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">{permission.name}</span>
-                    </label>
-                  ))}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Additional Permissions
+                  </label>
+                  <div className="space-y-2">
+                    {DEFAULT_PERMISSIONS.map(permission => (
+                      <label key={permission.id} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={editForm.permissions?.includes(permission.id)}
+                          onChange={(e) => {
+                            const permissions = editForm.permissions || []
+                            setEditForm({
+                              ...editForm,
+                              permissions: e.target.checked
+                                ? [...permissions, permission.id]
+                                : permissions.filter(p => p !== permission.id)
+                            })
+                          }}
+                          className="h-4 w-4 text-fbla-blue focus:ring-fbla-blue border-gray-300 rounded"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">{permission.name}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -327,7 +306,7 @@ export default function UserManagement({ onClose }: UserManagementProps) {
             className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6"
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-gray-900">Add New User</h3>
+              <h3 className="text-lg font-medium text-gray-900">Add User</h3>
               <button
                 onClick={() => setShowAddModal(false)}
                 className="text-gray-400 hover:text-gray-500"
@@ -339,86 +318,87 @@ export default function UserManagement({ onClose }: UserManagementProps) {
             <form onSubmit={(e) => {
               e.preventDefault()
               handleAddUser(editForm)
-            }} className="space-y-4">
-              <div>
-                <label htmlFor="new-name" className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="new-name"
-                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                />
-              </div>
+            }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={editForm.name || ''}
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="new-email" className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="new-email"
-                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={editForm.email || ''}
+                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="new-password"
-                  onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={editForm.password || ''}
+                    onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="new-role" className="block text-sm font-medium text-gray-700">
-                  Role
-                </label>
-                <select
-                  id="new-role"
-                  onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
-                  required
-                >
-                  <option value="">Select a role</option>
-                  {DEFAULT_ROLES.map(role => (
-                    <option key={role.id} value={role.id}>{role.name}</option>
-                  ))}
-                </select>
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Role
+                  </label>
+                  <select
+                    value={editForm.role || 'member'}
+                    onChange={(e) => setEditForm({ ...editForm, role: e.target.value as 'admin' | 'member' })}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-fbla-blue focus:ring-fbla-blue sm:text-sm"
+                  >
+                    {DEFAULT_ROLES.map(role => (
+                      <option key={role.id} value={role.id}>{role.name}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Additional Permissions
-                </label>
-                <div className="space-y-2">
-                  {DEFAULT_PERMISSIONS.map(permission => (
-                    <label key={permission.id} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        onChange={(e) => {
-                          const permissions = editForm.permissions || []
-                          setEditForm({
-                            ...editForm,
-                            permissions: e.target.checked
-                              ? [...permissions, permission.key]
-                              : permissions.filter(p => p !== permission.key)
-                          })
-                        }}
-                        className="h-4 w-4 text-fbla-blue focus:ring-fbla-blue border-gray-300 rounded"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">{permission.name}</span>
-                    </label>
-                  ))}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Additional Permissions
+                  </label>
+                  <div className="space-y-2">
+                    {DEFAULT_PERMISSIONS.map(permission => (
+                      <label key={permission.id} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={editForm.permissions?.includes(permission.id)}
+                          onChange={(e) => {
+                            const permissions = editForm.permissions || []
+                            setEditForm({
+                              ...editForm,
+                              permissions: e.target.checked
+                                ? [...permissions, permission.id]
+                                : permissions.filter(p => p !== permission.id)
+                            })
+                          }}
+                          className="h-4 w-4 text-fbla-blue focus:ring-fbla-blue border-gray-300 rounded"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">{permission.name}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
 

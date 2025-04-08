@@ -1,8 +1,11 @@
-export interface Permission {
-  id: string
-  name: string
-  description: string
-  key: string
+export enum Permission {
+  MANAGE_USERS = 'MANAGE_USERS',
+  MANAGE_EVENTS = 'MANAGE_EVENTS',
+  MANAGE_RESOURCES = 'MANAGE_RESOURCES',
+  MANAGE_SETTINGS = 'MANAGE_SETTINGS',
+  VIEW_ANALYTICS = 'VIEW_ANALYTICS',
+  MANAGE_ROLES = 'MANAGE_ROLES',
+  MANAGE_PERMISSIONS = 'MANAGE_PERMISSIONS'
 }
 
 export interface Role {
@@ -17,13 +20,13 @@ export interface User {
   name: string
   email: string
   password: string
-  role: string
-  permissions: string[] // Additional individual permissions
+  role: 'admin' | 'member' | 'officer'
+  permissions: Permission[]
   position?: string // Officer position if applicable
   createdAt: string
   updatedAt: string
   lastLogin?: string
-  status: 'active' | 'inactive' | 'pending'
+  status: 'active' | 'inactive' | 'suspended'
   profileImage?: string
   bio?: string
   contactInfo?: {
@@ -36,44 +39,14 @@ export interface User {
   }
 }
 
-// Default permissions based on FBLA structure
-export const DEFAULT_PERMISSIONS: Permission[] = [
-  {
-    id: 'events_manage',
-    name: 'Manage Events',
-    description: 'Create, edit, and delete events',
-    key: 'events_manage'
-  },
-  {
-    id: 'resources_manage',
-    name: 'Manage Resources',
-    description: 'Upload, edit, and delete resources',
-    key: 'resources_manage'
-  },
-  {
-    id: 'users_manage',
-    name: 'Manage Users',
-    description: 'Create, edit, and delete users',
-    key: 'users_manage'
-  },
-  {
-    id: 'competitions_manage',
-    name: 'Manage Competitions',
-    description: 'Manage competition information and registrations',
-    key: 'competitions_manage'
-  },
-  {
-    id: 'finance_manage',
-    name: 'Manage Finance',
-    description: 'Handle financial records and transactions',
-    key: 'finance_manage'
-  },
-  {
-    id: 'content_manage',
-    name: 'Manage Content',
-    description: 'Edit website content and pages',
-    key: 'content_manage'
-  }
+export const ADMIN_PERMISSIONS = [
+  Permission.MANAGE_USERS,
+  Permission.MANAGE_EVENTS,
+  Permission.MANAGE_RESOURCES,
+  Permission.MANAGE_SETTINGS,
+  Permission.VIEW_ANALYTICS,
+  Permission.MANAGE_ROLES,
+  Permission.MANAGE_PERMISSIONS
 ]
 
 // Default roles based on FBLA officer positions
@@ -82,58 +55,37 @@ export const DEFAULT_ROLES: Role[] = [
     id: 'admin',
     name: 'Administrator',
     description: 'Full system access',
-    permissions: DEFAULT_PERMISSIONS.map(p => p.key)
+    permissions: ADMIN_PERMISSIONS.map(p => p.toString())
   },
   {
     id: 'president',
     name: 'President',
     description: 'Chapter president with high-level management access',
-    permissions: [
-      'events_manage',
-      'resources_manage',
-      'users_manage',
-      'competitions_manage',
-      'content_manage'
-    ]
+    permissions: ADMIN_PERMISSIONS.map(p => p.toString())
   },
   {
     id: 'vice_president',
     name: 'Vice President',
     description: 'Chapter vice president with management access',
-    permissions: [
-      'events_manage',
-      'resources_manage',
-      'competitions_manage',
-      'content_manage'
-    ]
+    permissions: ADMIN_PERMISSIONS.map(p => p.toString())
   },
   {
     id: 'secretary',
     name: 'Secretary',
     description: 'Chapter secretary with content management access',
-    permissions: [
-      'events_manage',
-      'resources_manage',
-      'content_manage'
-    ]
+    permissions: ADMIN_PERMISSIONS.map(p => p.toString())
   },
   {
     id: 'treasurer',
     name: 'Treasurer',
     description: 'Chapter treasurer with financial management access',
-    permissions: [
-      'finance_manage',
-      'content_manage'
-    ]
+    permissions: ADMIN_PERMISSIONS.map(p => p.toString())
   },
   {
     id: 'reporter',
     name: 'Reporter',
     description: 'Chapter reporter with content creation access',
-    permissions: [
-      'content_manage',
-      'events_manage'
-    ]
+    permissions: ADMIN_PERMISSIONS.map(p => p.toString())
   },
   {
     id: 'member',
@@ -141,4 +93,12 @@ export const DEFAULT_ROLES: Role[] = [
     description: 'Regular chapter member',
     permissions: []
   }
+]
+
+export const DEFAULT_PERMISSIONS = [
+  { id: Permission.MANAGE_USERS, name: 'Manage Users', description: 'Create, edit, and delete user accounts' },
+  { id: Permission.MANAGE_EVENTS, name: 'Manage Events', description: 'Create, edit, and delete events' },
+  { id: Permission.MANAGE_RESOURCES, name: 'Manage Resources', description: 'Upload, edit, and delete resources' },
+  { id: Permission.VIEW_ANALYTICS, name: 'View Analytics', description: 'Access analytics and reports' },
+  { id: Permission.MANAGE_SETTINGS, name: 'Manage Settings', description: 'Configure system settings' }
 ] 
